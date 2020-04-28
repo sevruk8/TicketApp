@@ -17,7 +17,7 @@ namespace Database.Database.Entities
         
         [EmailAddress]
         public string Email { get; set; }
-        public string UserLogin { get; set; }
+        public string Login { get; set; }
         public string PasswordHash { get; set; }
         public string PasswordSalt { get; set; }
     }

@@ -5,25 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Services\PassageService\Models\**" />
     <Compile Remove="Services\StationService\Models\**" />
     <Compile Remove="Services\TrainService\Models\**" />
-    <Compile Remove="Services\UserService\Models\**" />
     <Compile Remove="wwwroot\**" />
-    <Content Remove="Services\PassageService\Models\**" />
     <Content Remove="Services\StationService\Models\**" />
     <Content Remove="Services\TrainService\Models\**" />
-    <Content Remove="Services\UserService\Models\**" />
     <Content Remove="wwwroot\**" />
-    <EmbeddedResource Remove="Services\PassageService\Models\**" />
     <EmbeddedResource Remove="Services\StationService\Models\**" />
     <EmbeddedResource Remove="Services\TrainService\Models\**" />
-    <EmbeddedResource Remove="Services\UserService\Models\**" />
     <EmbeddedResource Remove="wwwroot\**" />
-    <None Remove="Services\PassageService\Models\**" />
     <None Remove="Services\StationService\Models\**" />
     <None Remove="Services\TrainService\Models\**" />
-    <None Remove="Services\UserService\Models\**" />
     <None Remove="wwwroot\**" />
   </ItemGroup>
 
@@ -38,6 +30,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.1" PrivateAssets="All" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />

@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TicketApp.Service.TicketService;
+using TicketApp.Service.TicketService.Abstractions;
 using TicketApp.Service.TicketService.Abstractions.Models;
+using TicketApp.Services.TicketService.Abstractions.Models;
 
 namespace TicketApp.Controllers
 {
@@ -13,18 +15,18 @@ namespace TicketApp.Controllers
     [ApiController]
     public class TicketController : ControllerBase
     {
-        private readonly TicketService _ticketService;
+        private readonly ITicketService _ticketService;
 
-        public TicketController(TicketService ticketService)
+        public TicketController(ITicketService ticketService)
         {
             _ticketService = ticketService;
         }
 
 
         [HttpGet]
-        public ActionResult<List<TicketModel>> GetTickets()
+        public async Task<List<TicketShortModel>> GetTickets([FromQuery] TicketShortModel ticketShortModel)
         {
-            return _ticketService.GetAllTickets();
+            return _ticketService.GetAllTickets(ticketShortModel);
         }
 
         [HttpGet("{id}")]
@@ -33,18 +35,16 @@ namespace TicketApp.Controllers
             return _ticketService.GetTicket(Id);
         }
 
-        
-
         [HttpPost]
-        public ActionResult<Guid> CreateTicket([FromBody]TicketModel ticket)
+        public ActionResult<Guid> CreateTicket([FromBody]TicketInfo ticketInfo)
         {
-            return _ticketService.CreateTicket(ticket);
+            return _ticketService.CreateTicket(ticketInfo);
         }
         
         [HttpDelete]
-        public void DeleteTicket([FromQuery] Guid Id)
+        public void DeleteTicket([FromQuery] Guid Id, [FromBody]TicketModel ticketModel)
         {
-            _ticketService.DeleteTicket(Id);
+            _ticketService.DeleteTicket(Id, ticketModel);
         }
 
         [HttpPut("{ticketId}")]

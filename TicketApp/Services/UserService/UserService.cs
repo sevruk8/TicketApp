@@ -1,5 +1,6 @@
 ﻿using Database;
 using Database.Database.Entities;
+using Database.Database.Enums;
 using Identity.Abstractions;
 using Identity.Models;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,8 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using TicketApp.Service.UserService.Abstractions;
 using TicketApp.Service.UserService.Abstractions.Models;
+using TicketApp.Services.UserService.Models;
+using Utils;
 
 namespace TicketApp.Service.UserService
 {
@@ -33,9 +36,10 @@ namespace TicketApp.Service.UserService
         /// </summary>
         /// <param name="authorizationModel"></param>
         /// <returns></returns>
+        
         public async Task<Token> Authorization(AuthorizationModel authorizationModel)
         {
-            var existingUser = await _dbContext.Users.SingleOrDefaultAsync(x => x.UserLogin == authorizationModel.Login);
+            var existingUser = await _dbContext.Users.SingleOrDefaultAsync(x => x.Login == authorizationModel.Login);
             if (existingUser != null)
             {
                 if ((authorizationModel.Password + existingUser.PasswordSalt) == existingUser.PasswordHash)
@@ -60,22 +64,54 @@ namespace TicketApp.Service.UserService
         /// </summary>
         /// <param name="registrationModel"></param>
         /// <returns></returns>
+        /// 
+        
         public async Task Registration(RegistrationModel registrationModel)
         {
-            var salt = Convert.ToString(Guid.NewGuid());
+            var salt = new Random();
             User user = new User
             {
-                UserLogin = registrationModel.Login,
+                Id = Guid.NewGuid(),
+                Type = UserType.User,
+                Login = registrationModel.Login,
                 Email = registrationModel.Email,
                 FirstName = registrationModel.FirstName,
                 LastName = registrationModel.LastName,
-                PasswordSalt = salt,
+                PasswordSalt = salt.GenerateSalt(),
                 PasswordHash = (registrationModel.Password + salt)
             };
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
         }
+
+        /// <summary>
+        /// Регистрация администратора
+        /// </summary>
+        /// <param name="registrationAdminModel"></param>
+        /// <returns></returns>
+        /// 
+
+        public async Task RegistrationAdmin(RegistrationAdminModel registrationAdminModel)
+        {
+            var salt = Convert.ToString(Guid.NewGuid());
+
+            User user = new User
+            {
+                Id = Guid.NewGuid(),
+                Type = UserType.Admin,
+                Login = registrationAdminModel.Login,
+                Email = registrationAdminModel.Email,
+                FirstName = registrationAdminModel.FirstName,
+                LastName = registrationAdminModel.LastName,
+                PasswordSalt = salt,
+                PasswordHash = (registrationAdminModel.Password + salt)
+            };
+
+            await _dbContext.Users.AddAsync(user);
+            await _dbContext.SaveChangesAsync();
+        }
+
 
         public Guid CreateUser(UserInfo userInfo)
         {
@@ -91,7 +127,6 @@ namespace TicketApp.Service.UserService
             _dbContext.SaveChanges();
             return user.Id;
         }
-
         public void DeleteUser(Guid Id)
         {
             var user = _dbContext.Users.First(e => e.Id == Id);
@@ -120,6 +155,7 @@ namespace TicketApp.Service.UserService
             return resultUsers;
         }
 
+        
         public UserModel GetUser(Guid Id)
         {
             var dbUser = _dbContext.Users.First(e => e.Id == Id);
@@ -136,6 +172,7 @@ namespace TicketApp.Service.UserService
             return user;
         }
 
+        
         public void UpdateUser(Guid Id, UserInfo userInfo)
         {
             var user = _dbContext.Users.First(e => e.Id == Id);
@@ -146,7 +183,6 @@ namespace TicketApp.Service.UserService
 
             _dbContext.SaveChanges();
         }
-
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using Database;
+﻿using AutoMapper;
+using Database;
 using Database.Database.Entities;
 using Database.Database.Enums;
 using System;
@@ -7,20 +8,26 @@ using System.Linq;
 using System.Text;
 using TicketApp.Service.PassageService.Abstractions;
 using TicketApp.Service.PassageService.Abstractions.Models;
+using TicketApp.Services.PassageService.Models;
 
 namespace TicketApp.Service.PassageService
 {
+    /// <summary>
+    /// Класс реализующий интерфейс Рейсов
+    /// </summary>
     public class PassageService : IPassageService
     {
         private readonly DatabaseContext _dbContext;
-        public PassageService(DatabaseContext dbContext)
+        private readonly IMapper _mapper;
+        public PassageService(DatabaseContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
-        
+       
         public Guid CreatePassage(PassageInfo passageInfo)
         {
-            if (_dbContext.Users.First(e => e.Id == passageInfo.UserId).Type != UserType.User)
+            if (_dbContext.Users.First(e => e.Id == passageInfo.RequestUserId).Type != UserType.User)
             {
                 var passage = new Passage()
                 {
@@ -33,57 +40,53 @@ namespace TicketApp.Service.PassageService
                 _dbContext.SaveChanges();
                 return passage.Id;
             }
-            throw new Exception("У вас нет прав доступа");
-          
-
+            else {throw new Exception("У вас нет прав доступа");}
+            
+            
         }
-        public void DeletePassage(Guid id)
-        {
 
-            var passage = _dbContext.Passages.First(e => e.Id == id);
-            _dbContext.Passages.Remove(passage);
-            _dbContext.SaveChanges();
-        }
-        public List<PassageShortModel> GetAllPassages()
-        {
-            var passages = _dbContext.Passages;
-
-            var resultPassages = new List<PassageShortModel>();
-
-            foreach (var dbPassage in passages)
-            {
-                var passage = new PassageShortModel()
-                {
-                    From = dbPassage.From,
-                    To = dbPassage.To,
-                    Id = dbPassage.Id,
-                    MaxTickets = dbPassage.MaxTickets
-                };
-                resultPassages.Add(passage);
-            }
-
-            return resultPassages;
-        }
-        public PassageModel GetPassage(Guid id)
-        {
-            var dbPassage = _dbContext.Passages.First(e => e.Id == id);
-
-            var passage = new PassageModel()
-            {
-                From = dbPassage.From,
-                To = dbPassage.To,
-                Id = dbPassage.Id
-            };
-
-            return passage;
-        }
         public void UpdatePassage(Guid passageId, PassageInfo passageInfo)
         {
             var passage = _dbContext.Passages.First(e => e.Id == passageId);
 
             passage.From = passageInfo.From;
             passage.To = passageInfo.To;
+            passage.MaxTickets = passageInfo.MaxTickets;
             _dbContext.SaveChanges();
+        }
+
+        public void DeletePassage(PassageRemoveInfo passageRemoveInfo)
+        {
+            if (_dbContext.Users.First(e => e.Id == passageRemoveInfo.RequestUserId).Type != UserType.User)
+            {
+                var passage = _dbContext.Passages.First(e => e.Id == passageRemoveInfo.PassageId);
+                _dbContext.Passages.Remove(passage);
+                _dbContext.SaveChanges();
+            }
+            else {throw new Exception("У вас нет прав доступа");}
+            
+            
+        }
+
+        
+        public List<PassageShortModel> GetAllPassages()
+        {
+            var passages = _dbContext.Passages;
+            var resultPassages = new List<PassageShortModel>();
+            foreach(var passage in passages)
+            {
+                var passageShortModel = _mapper.Map<PassageShortModel>(passage);
+                resultPassages.AddRange(passages.Select(e => _mapper.Map<PassageShortModel>(e)));
+            }
+            
+            return resultPassages;
+        }
+
+        
+        public PassageModel GetPassage(Guid passageId)
+        {
+            var passage = _dbContext.Passages.First(e => e.Id == passageId);
+            return _mapper.Map<PassageModel>(passage);
         }
     }
 }

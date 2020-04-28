@@ -1,87 +1,102 @@
-﻿using Database;
+﻿using AutoMapper;
+using Database;
 using Database.Database.Entities;
+using Database.Database.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using TicketApp.Service.TicketService.Abstractions;
 using TicketApp.Service.TicketService.Abstractions.Models;
+using TicketApp.Services.TicketService.Abstractions.Models;
 
 namespace TicketApp.Service.TicketService
 {
+    /// <summary>
+    /// Класс реализующий интерфейс Билетов
+    /// </summary>
     public class TicketService : ITicketService
     {
         private readonly DatabaseContext _dbContext;
+        private readonly IMapper _mapper;
 
-        public TicketService(DatabaseContext dbContext)
+        public TicketService(DatabaseContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
-        public Guid CreateTicket(TicketModel ticketModel)
+
+        
+        public Guid CreateTicket(TicketInfo ticketInfo)
         {
-            var ticket = new Ticket()
+            
+                var ticket = new Ticket()
+                {
+                    Id = Guid.NewGuid(),
+                    ClientId = ticketInfo.ClientId,
+                    Departure = ticketInfo.Departure,
+                    Arrival = ticketInfo.Arrival
+                };
+                _dbContext.Tickets.Add(ticket);
+                _dbContext.SaveChanges();
+                return ticket.Id;
+           
+
+        }
+
+        public void DeleteTicket(Guid Id, TicketModel ticketModel)
+        {
+            var isAdminOrCashier = _dbContext.Users.First(e => e.Id == ticketModel.UserId).Type != UserType.User;
+            var isOwnerAndValidTime = (ticketModel.ClientId == ticketModel.UserId) && (ticketModel.Departure - DateTime.Now > TimeSpan.FromMinutes(15));
+
+            if (isAdminOrCashier || isOwnerAndValidTime)
             {
-                Id = Guid.NewGuid(),
-                ClientId = ticketModel.ClientId,
-                DateAdded = ticketModel.DateAdded,
-                DateClosed = ticketModel.DateClosed
-            };
+                var ticket = _dbContext.Tickets.First(e => e.Id == Id);
+                _dbContext.Tickets.Remove(ticket);
+                _dbContext.SaveChanges();
+            }
 
-            _dbContext.Tickets.Add(ticket);
-            _dbContext.SaveChanges();
-            return ticket.Id;
+            else {throw new Exception("У вас нет прав доступа");}
         }
 
-        public void DeleteTicket(Guid Id)
-        {
-            var ticket = _dbContext.Tickets.First(e => e.Id == Id);
-            _dbContext.Tickets.Remove(ticket);
-            _dbContext.SaveChanges();
-        }
+        
 
-        public List<TicketModel> GetAllTickets()
+        public List<TicketShortModel> GetAllTickets(TicketShortModel ticketShortModel)
         {
             var tickets = _dbContext.Tickets;
 
-            var resultTickets = new List<TicketModel>();
+            var resultTickets = new List<TicketShortModel>();
+            
+            resultTickets.AddRange(tickets.Select(e => _mapper.Map<TicketShortModel>(e)));
 
-            foreach (var dbTicket in tickets)
+            var isAdminOrCashier = _dbContext.Users.First(e => e.Id == ticketShortModel.UserId).Type != UserType.User;
+            if (!isAdminOrCashier)
             {
-                var ticket = new TicketModel()
-                {
-                    Id = dbTicket.Id,
-                    ClientId = dbTicket.ClientId,
-                    DateAdded = dbTicket.DateAdded,
-                    DateClosed = dbTicket.DateClosed
-                };
-                resultTickets.Add(ticket);
+                resultTickets = resultTickets.Where(e => e.ClientId == ticketShortModel.UserId).ToList();
             }
 
             return resultTickets;
         }
 
+        
         public TicketModel GetTicket(Guid Id)
         {
-            var dbTicket = _dbContext.Tickets.First(e => e.Id == Id);
 
-            var ticket = new TicketModel()
-            {
-                Id = dbTicket.Id,
-                ClientId = dbTicket.ClientId,
-                DateAdded = dbTicket.DateAdded,
-                DateClosed = dbTicket.DateClosed
-            };
-
-            return ticket;
-        }
-
-        public void UpdateTicket(Guid Id, TicketModel ticketModel)
-        {
             var ticket = _dbContext.Tickets.First(e => e.Id == Id);
 
-            ticket.DateAdded = ticketModel.DateAdded;
-            ticket.DateClosed = ticketModel.DateClosed;
+            return _mapper.Map<TicketModel>(ticket);
+        }
 
-            _dbContext.SaveChanges();
+
+        
+        public void UpdateTicket(Guid Id, TicketModel ticketModel)
+        {
+            if((_dbContext.Users.First(e => e.Id == ticketModel.UserId).Type != UserType.User)||(
+                ticketModel.ClientId == ticketModel.UserId))
+            {
+                var ticket = _dbContext.Tickets.First(e => e.Id == Id);
+
+                _dbContext.SaveChanges();
+            }
         }
     }
 }

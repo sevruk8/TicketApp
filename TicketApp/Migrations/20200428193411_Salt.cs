@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TicketApp.Migrations
 {
-    public partial class AppStart : Migration
+    public partial class Salt : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,8 +15,7 @@ namespace TicketApp.Migrations
                     From = table.Column<string>(nullable: true),
                     To = table.Column<string>(nullable: true),
                     MaxTickets = table.Column<int>(nullable: false),
-                    Departure = table.Column<DateTime>(nullable: false),
-                    Arrival = table.Column<DateTime>(nullable: false)
+                    Departure = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -29,9 +28,9 @@ namespace TicketApp.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     ClientId = table.Column<Guid>(nullable: false),
-                    DateAdded = table.Column<DateTime>(nullable: false),
-                    DateClosed = table.Column<DateTime>(nullable: false),
-                    MaxTicket = table.Column<int>(nullable: false)
+                    PassageId = table.Column<Guid>(nullable: false),
+                    Departure = table.Column<DateTime>(nullable: false),
+                    Arrival = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -47,7 +46,7 @@ namespace TicketApp.Migrations
                     LastName = table.Column<string>(nullable: true),
                     Type = table.Column<int>(nullable: false),
                     Email = table.Column<string>(nullable: true),
-                    UserLogin = table.Column<string>(nullable: true),
+                    Login = table.Column<string>(nullable: true),
                     PasswordHash = table.Column<string>(nullable: true),
                     PasswordSalt = table.Column<string>(nullable: true)
                 },

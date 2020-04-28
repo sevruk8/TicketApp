@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using TicketApp.Service.PassageService;
+using TicketApp.Service.PassageService.Abstractions;
 using TicketApp.Service.PassageService.Abstractions.Models;
+using TicketApp.Services.PassageService.Models;
 
 namespace TicketApp.Controllers
 {
-    [Route("Passages")]
+    [Route("/Passages")]
     [ApiController]
     public class PassageController : ControllerBase
     {
-        private readonly PassageService _passageService;
-        public PassageController(PassageService passageService)
+        private readonly IPassageService _passageService;
+        public PassageController(IPassageService passageService)
         {
             _passageService = passageService;
         }
@@ -35,13 +37,13 @@ namespace TicketApp.Controllers
         }
         
         [HttpDelete]
-        public void DeletePassage([FromQuery] Guid id)
+        public void DeletePassage([FromBody]PassageRemoveInfo passageRemoveInfo)
         {
-            _passageService.DeletePassage(id);
+            _passageService.DeletePassage(passageRemoveInfo);
         }
         
         [HttpPut("{passageId}")]
-        public void UpdatePassage([FromBody] PassageInfo passage, [FromRoute]Guid passageId)
+        public void UpdatePassage([FromBody]PassageInfo passage, [FromRoute]Guid passageId)
         {
             _passageService.UpdatePassage(passageId, passage);
         }

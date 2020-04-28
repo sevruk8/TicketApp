@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace TicketApp.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20200419133020_AppStart")]
-    partial class AppStart
+    [Migration("20200428193411_Salt")]
+    partial class Salt
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -25,8 +25,6 @@ namespace TicketApp.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("Arrival");
 
                     b.Property<DateTime>("Departure");
 
@@ -46,13 +44,13 @@ namespace TicketApp.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("Arrival");
+
                     b.Property<Guid>("ClientId");
 
-                    b.Property<DateTime>("DateAdded");
+                    b.Property<DateTime>("Departure");
 
-                    b.Property<DateTime>("DateClosed");
-
-                    b.Property<int>("MaxTicket");
+                    b.Property<Guid>("PassageId");
 
                     b.HasKey("Id");
 
@@ -69,13 +67,13 @@ namespace TicketApp.Migrations
 
                     b.Property<string>("LastName");
 
+                    b.Property<string>("Login");
+
                     b.Property<string>("PasswordHash");
 
                     b.Property<string>("PasswordSalt");
 
                     b.Property<int>("Type");
-
-                    b.Property<string>("UserLogin");
 
                     b.HasKey("Id");
 

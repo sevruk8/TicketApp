@@ -4,18 +4,24 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using TicketApp.Service.UserService.Abstractions.Models;
+using TicketApp.Services.UserService.Models;
 
 namespace TicketApp.Service.UserService.Abstractions
 {
-    interface IUserService
+    public interface IUserService
     {
 
         /// <summary>
-        /// Регистрация
+        /// Регистрация пользователя
         /// </summary>
         /// <param name="registrationModel"></param>
         /// <returns></returns>
         Task Registration(RegistrationModel registrationModel);
+
+        /// <summary>
+        /// Регистрация администратора
+        /// </summary>
+        Task RegistrationAdmin(RegistrationAdminModel registrationAdminModel);
 
         /// <summary>
         /// Авторизация 

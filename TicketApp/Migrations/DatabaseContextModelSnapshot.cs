@@ -24,8 +24,6 @@ namespace TicketApp.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("Arrival");
-
                     b.Property<DateTime>("Departure");
 
                     b.Property<string>("From");
@@ -44,13 +42,13 @@ namespace TicketApp.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("Arrival");
+
                     b.Property<Guid>("ClientId");
 
-                    b.Property<DateTime>("DateAdded");
+                    b.Property<DateTime>("Departure");
 
-                    b.Property<DateTime>("DateClosed");
-
-                    b.Property<int>("MaxTicket");
+                    b.Property<Guid>("PassageId");
 
                     b.HasKey("Id");
 
@@ -67,13 +65,13 @@ namespace TicketApp.Migrations
 
                     b.Property<string>("LastName");
 
+                    b.Property<string>("Login");
+
                     b.Property<string>("PasswordHash");
 
                     b.Property<string>("PasswordSalt");
 
                     b.Property<int>("Type");
-
-                    b.Property<string>("UserLogin");
 
                     b.HasKey("Id");
 

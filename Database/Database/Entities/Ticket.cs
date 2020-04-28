@@ -15,20 +15,23 @@ namespace Database.Database.Entities
         public Guid Id { get; set; }
 
         // <summary>
-        /// ID прользователя, которому принадлежит билет
+        /// ID кому принадлежит билет
         /// </summary>
         public Guid ClientId { get; set; }
 
         /// <summary>
-        /// Дата добавления
+        /// ID рейса 
         /// </summary>
-        public DateTime DateAdded { get; set; }
+        public Guid PassageId { get; set; }
 
         /// <summary>
-        /// Дата завершения
+        /// Время отправления
         /// </summary>
-        public DateTime DateClosed { get; set; }
+        public DateTime Departure { get; set; }
+        /// <summary>
+        /// Время прибытия
+        /// </summary>
+        public DateTime Arrival { get; set; }
 
-        public int MaxTicket { get; set; }
     }
 }

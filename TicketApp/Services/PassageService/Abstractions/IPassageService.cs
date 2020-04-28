@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using System.Text;
 using TicketApp.Service.PassageService.Abstractions.Models;
+using TicketApp.Services.PassageService.Models;
 
 namespace TicketApp.Service.PassageService.Abstractions
 {
     public interface IPassageService
     {
-        PassageModel GetPassage(Guid id);
+        PassageModel GetPassage(Guid Id);
 
         List<PassageShortModel> GetAllPassages();
 
-        void UpdatePassage(Guid passageId, PassageInfo passage);
+        void UpdatePassage(Guid Id, PassageInfo passage);
 
-        Guid CreatePassage(PassageInfo passage);
+        Guid CreatePassage(PassageInfo passageInfo);
 
-        void DeletePassage(Guid id);
+        void DeletePassage(PassageRemoveInfo passageRemoveInfo);
     }
 }

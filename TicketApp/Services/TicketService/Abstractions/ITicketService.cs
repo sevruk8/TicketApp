@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using TicketApp.Service.TicketService.Abstractions.Models;
+using TicketApp.Services.TicketService.Abstractions.Models;
 
 namespace TicketApp.Service.TicketService.Abstractions
 {
@@ -9,12 +10,12 @@ namespace TicketApp.Service.TicketService.Abstractions
     {
         TicketModel GetTicket(Guid Id);
 
-        List<TicketModel> GetAllTickets();
+        List<TicketShortModel> GetAllTickets(TicketShortModel ticketShortModel);
 
         void UpdateTicket(Guid Id, TicketModel ticket);
 
-        Guid CreateTicket(TicketModel ticket);
+        Guid CreateTicket(TicketInfo ticketInfo);
 
-        void DeleteTicket(Guid id);
+        void DeleteTicket(Guid Id, TicketModel ticketModel);
     }
 }

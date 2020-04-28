@@ -10,22 +10,22 @@ namespace Identity.Models
     public class IdentityOptions
     {
         /// <summary>
-        /// Имя того, кем выдаётся токен
+        /// Имя того кем выдаётся токен
         /// </summary>
         public string TokenIssuer { get; set; }
 
         /// <summary>
-        /// Название группы, для которой распостраняются токены
+        /// Название группы для которой распостраняются токены
         /// </summary>
         public string TokenAudience { get; set; }
 
         /// <summary>
-        /// Время, в течении которого живёт токен
+        /// Время в течении которого живёт токен
         /// </summary>
         public TimeSpan LifeTime { get; set; }
 
         /// <summary>
-        /// Ключ, используемый для подписи токена
+        /// Ключ используемый для подписи токена
         /// </summary>
         public string SigningKey { get; set; }
     }

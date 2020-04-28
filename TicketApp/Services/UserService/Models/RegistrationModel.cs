@@ -6,7 +6,7 @@ using System.Text;
 namespace TicketApp.Service.UserService.Abstractions.Models
 {
     /// <summary>
-    /// Модель регистрации
+    /// Модель регистрации пользователя
     /// </summary>
     public class RegistrationModel
     {
@@ -35,6 +35,7 @@ namespace TicketApp.Service.UserService.Abstractions.Models
         /// Фамилия 
         /// </summary>
         public string LastName { get; set; }
+
 
 
     }

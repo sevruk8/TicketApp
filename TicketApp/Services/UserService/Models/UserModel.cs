@@ -12,7 +12,7 @@ namespace TicketApp.Service.UserService.Abstractions.Models
         public string LastName { get; set; }
         public UserType Type { get; set; }
         public string Email { get; set; }
-        public string UserLogin { get; set; }
+        public string Login { get; set; }
         public string PasswordHash { get; set; }
         public string PasswordSalt { get; set; }
     }

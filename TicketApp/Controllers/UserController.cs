@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TicketApp.Service.UserService;
+using TicketApp.Service.UserService.Abstractions;
 using TicketApp.Service.UserService.Abstractions.Models;
+using TicketApp.Services.UserService.Models;
 
 namespace TicketApp.Controllers
 {
@@ -13,9 +15,9 @@ namespace TicketApp.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
-        public UserController(UserService userService)
+        public UserController(IUserService userService)
         {
             _userService = userService;
         }
@@ -38,11 +40,20 @@ namespace TicketApp.Controllers
         /// </summary>
         /// <param name="registrationModel"></param>
         /// <returns></returns>
+        
         [HttpGet]
+        [AllowAnonymous]
         [Route("Registration")]
         public async Task Registration([FromQuery]RegistrationModel registrationModel)
         {
             await _userService.Registration(registrationModel);
+        }
+
+        [HttpGet]
+        [Route("Administrator")]
+        public async Task RegistrationAdmin([FromQuery]RegistrationAdminModel registrationAdminModel)
+        {
+            await _userService.RegistrationAdmin(registrationAdminModel);
         }
 
         [HttpPost]

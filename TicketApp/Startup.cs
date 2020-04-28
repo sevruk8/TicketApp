@@ -1,4 +1,5 @@
-﻿using Database;
+﻿using AutoMapper;
+using Database;
 using Identity;
 using Identity.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -22,6 +23,7 @@ using TicketApp.Service.TicketService;
 using TicketApp.Service.TicketService.Abstractions;
 using TicketApp.Service.UserService;
 using TicketApp.Service.UserService.Abstractions;
+using TicketApp.Services;
 
 namespace TicketApp
 {
@@ -89,6 +91,8 @@ namespace TicketApp
 
             #endregion
 
+            services.AddAutoMapper(typeof(DomainMappingProfile));
+
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
@@ -115,6 +119,8 @@ namespace TicketApp
                         o => o.MigrationsAssembly("TicketApp")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
+
+        
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
