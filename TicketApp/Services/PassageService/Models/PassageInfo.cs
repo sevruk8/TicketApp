@@ -21,10 +21,6 @@ namespace TicketApp.Service.PassageService.Abstractions.Models
         /// </summary>
         public DateTime Departure { get; set; }
         /// <summary>
-        /// Время прибытия
-        /// </summary>
-        public DateTime Arrival { get; set; }
-        /// <summary>
         /// Максимальное количество билетов
         /// </summary>
         public int MaxTickets { get; set; }

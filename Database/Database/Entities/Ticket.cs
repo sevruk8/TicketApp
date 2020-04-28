@@ -28,10 +28,9 @@ namespace Database.Database.Entities
         /// Время отправления
         /// </summary>
         public DateTime Departure { get; set; }
-        /// <summary>
-        /// Время прибытия
-        /// </summary>
-        public DateTime Arrival { get; set; }
+
+        public string From { get; set; }
+
 
     }
 }

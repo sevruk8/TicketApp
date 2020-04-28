@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TicketApp.Services.TicketService.Models.Enums;
 
 namespace TicketApp.Services.TicketService.Abstractions.Models
 {
@@ -25,5 +26,8 @@ namespace TicketApp.Services.TicketService.Abstractions.Models
         /// ID пользователя делающий запрос
         /// </summary>
         public Guid UserId { get; }
+        public string From { get; set; }
+
+        public SortedField SortedField { get; set; }
     }
 }

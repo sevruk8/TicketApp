@@ -9,6 +9,7 @@ using System.Text;
 using TicketApp.Service.PassageService.Abstractions;
 using TicketApp.Service.PassageService.Abstractions.Models;
 using TicketApp.Services.PassageService.Models;
+using TicketApp.Services.PassageService.Models.Enums;
 
 namespace TicketApp.Service.PassageService
 {
@@ -69,7 +70,7 @@ namespace TicketApp.Service.PassageService
         }
 
         
-        public List<PassageShortModel> GetAllPassages()
+        public List<PassageShortModel> GetAllPassages(GetAllPassagesParameters parameters)
         {
             var passages = _dbContext.Passages;
             var resultPassages = new List<PassageShortModel>();
@@ -77,8 +78,15 @@ namespace TicketApp.Service.PassageService
             {
                 var passageShortModel = _mapper.Map<PassageShortModel>(passage);
                 resultPassages.AddRange(passages.Select(e => _mapper.Map<PassageShortModel>(e)));
+                if (!string.IsNullOrEmpty(parameters.UserCity))
+                {
+                    resultPassages = resultPassages.Where(e => e.From.Contains(parameters.UserCity)).ToList();
+                }
+                if (parameters.SortedField != SortedField.None)
+                {
+                    resultPassages = resultPassages.Where(e => e.SortedField == parameters.SortedField).ToList();
+                }
             }
-            
             return resultPassages;
         }
 

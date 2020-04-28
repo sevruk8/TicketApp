@@ -11,7 +11,6 @@ namespace TicketApp.Service.PassageService.Abstractions.Models
         public string To { get; set; }
         public int MaxTickets { get; set; }
         public DateTime Departure { get; set; }
-        public DateTime Arrival { get; set; }
         public Guid UserId { get; }
     }
 }

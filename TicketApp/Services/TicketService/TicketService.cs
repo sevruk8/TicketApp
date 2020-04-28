@@ -8,6 +8,8 @@ using System.Linq;
 using TicketApp.Service.TicketService.Abstractions;
 using TicketApp.Service.TicketService.Abstractions.Models;
 using TicketApp.Services.TicketService.Abstractions.Models;
+using TicketApp.Services.TicketService.Models;
+using TicketApp.Services.TicketService.Models.Enums;
 
 namespace TicketApp.Service.TicketService
 {
@@ -33,8 +35,7 @@ namespace TicketApp.Service.TicketService
                 {
                     Id = Guid.NewGuid(),
                     ClientId = ticketInfo.ClientId,
-                    Departure = ticketInfo.Departure,
-                    Arrival = ticketInfo.Arrival
+                    Departure = ticketInfo.Departure
                 };
                 _dbContext.Tickets.Add(ticket);
                 _dbContext.SaveChanges();
@@ -60,7 +61,7 @@ namespace TicketApp.Service.TicketService
 
         
 
-        public List<TicketShortModel> GetAllTickets(TicketShortModel ticketShortModel)
+        public List<TicketShortModel> GetAllTickets(TicketShortModel ticketShortModel, GetAllTicketsParameters parameters)
         {
             var tickets = _dbContext.Tickets;
 
@@ -72,6 +73,14 @@ namespace TicketApp.Service.TicketService
             if (!isAdminOrCashier)
             {
                 resultTickets = resultTickets.Where(e => e.ClientId == ticketShortModel.UserId).ToList();
+                if (!string.IsNullOrEmpty(parameters.UserCity))
+                {
+                    resultTickets = resultTickets.Where(e => e.From.Contains(parameters.UserCity)).ToList();
+                }
+                if (parameters.SortedField != SortedField.None)
+                {
+                    resultTickets = resultTickets.Where(e => e.SortedField == parameters.SortedField).ToList();
+                }
             }
 
             return resultTickets;

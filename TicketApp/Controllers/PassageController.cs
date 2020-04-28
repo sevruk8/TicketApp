@@ -19,9 +19,9 @@ namespace TicketApp.Controllers
         }
         
         [HttpGet]
-        public ActionResult<List<PassageShortModel>> GetPassages()
+        public ActionResult<List<PassageShortModel>> GetPassages([FromQuery]GetAllPassagesParameters parameters)
         {
-            return _passageService.GetAllPassages();
+            return _passageService.GetAllPassages(parameters);
         }
         
         [HttpGet("{id}")]

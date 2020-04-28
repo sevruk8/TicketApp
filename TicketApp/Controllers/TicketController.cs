@@ -8,6 +8,7 @@ using TicketApp.Service.TicketService;
 using TicketApp.Service.TicketService.Abstractions;
 using TicketApp.Service.TicketService.Abstractions.Models;
 using TicketApp.Services.TicketService.Abstractions.Models;
+using TicketApp.Services.TicketService.Models;
 
 namespace TicketApp.Controllers
 {
@@ -24,9 +25,9 @@ namespace TicketApp.Controllers
 
 
         [HttpGet]
-        public async Task<List<TicketShortModel>> GetTickets([FromQuery] TicketShortModel ticketShortModel)
+        public async Task<List<TicketShortModel>> GetTickets([FromQuery] TicketShortModel ticketShortModel, GetAllTicketsParameters parameters)
         {
-            return _ticketService.GetAllTickets(ticketShortModel);
+            return _ticketService.GetAllTickets(ticketShortModel, parameters);
         }
 
         [HttpGet("{id}")]

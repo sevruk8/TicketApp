@@ -10,7 +10,7 @@ namespace TicketApp.Service.PassageService.Abstractions
     {
         PassageModel GetPassage(Guid Id);
 
-        List<PassageShortModel> GetAllPassages();
+        List<PassageShortModel> GetAllPassages(GetAllPassagesParameters parameters);
 
         void UpdatePassage(Guid Id, PassageInfo passage);
 
