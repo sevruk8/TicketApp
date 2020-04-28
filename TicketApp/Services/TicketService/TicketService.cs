@@ -82,6 +82,17 @@ namespace TicketApp.Service.TicketService
                     resultTickets = resultTickets.Where(e => e.SortedField == parameters.SortedField).ToList();
                 }
             }
+            else
+            {
+                if (!string.IsNullOrEmpty(parameters.UserCity))
+                {
+                    resultTickets = resultTickets.Where(e => e.From.Contains(parameters.UserCity)).ToList();
+                }
+                if (parameters.SortedField != SortedField.None)
+                {
+                    resultTickets = resultTickets.Where(e => e.SortedField == parameters.SortedField).ToList();
+                }
+            }
 
             return resultTickets;
         }
